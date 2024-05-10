@@ -1,0 +1,1878 @@
+
+\newpage
+\section{Random Variables}
+
+\subsection*{Exercises}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.1}\\  % PDF page 43
+\textbf{Claim}: $\P(X = x) = F(x^+) - F(x^-)$. (Discrete)\\
+\textsc{Proof}. By definition of the CDF:
+$$
+F(x^+) = \lim_{z\downarrow x}F(z) = \lim_{z\downarrow x}\P(X\leq z),\qquad
+F(x^-) = \lim_{y\uparrow x}F(y) = \lim_{y\uparrow x}\P(X\leq y)
+$$
+(so $y<x$ and $y\ra x$, and $x<z$ and $x\leftarrow z$). By the right continuous property,
+we can deduce that $z > y$ and we can set $z = x$ and $y = x-1$.
+$$
+\P(X\leq x^+) = \P(X\leq x) = \P(X = x) + \P(X \leq x-1),\quad
+\P(X\leq x^-) = \P(X\leq x-1)
+$$
+So:
+\begin{align*}
+    \P(X = x) &= \P(X = x) + \P(X\leq x-1) - \P(X\leq x-1) \\
+    &= \P(X\leq x) - \P(X\leq x-1) \\
+    &= \P(X\leq x^+) - \P(X\leq x^-) \\
+    &= F(x^+) - F(x^-)
+    \tag*{\qed}
+\end{align*}
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.2}\\  % PDF page 44
+Let $X$ be such that $\P(X = 2) = \P(X = 3) = 1/10$ and $\P(X = 5) = 8/10$.
+Here is a plot of the CDF.
+\begin{center}
+    \begin{tikzpicture}
+\begin{axis}[
+    clip=false,
+    jump mark left,
+    ymin=0,ymax=1,
+    xmin=0, xmax=8,
+    every axis plot/.style={very thick},
+    discontinuous,
+    table/create on use/cumulative distribution/.style={
+        create col/expr={\pgfmathaccuma + \thisrow{f(x)}}   
+    }
+]
+\addplot [blue] table [y=cumulative distribution]{
+x f(x)
+0 0
+2 1/10
+3 1/10
+5 8/10
+8 0
+};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+By reading the plot, we can see that:
+$$
+\P(2 < X\leq 4.8) = F(4.8) - F(2) = 2/10 - 1/10 = 1/10
+$$
+$$
+\P(2\leq X\leq 4.8) = F(4.8) = 2/10
+$$
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.3}\\  % PDF page 44
+\textbf{Lemma 2.15} Let $F$ be the CDF for a random variable $X$. Then:
+\begin{enumerate}
+    \item $\P(X = x) = F(x) - F(x^-)$
+    \item $\P(x < X\leq y) = F(y) - F(x)$
+    \item $\P(X > x) = 1 - F(x)$
+    \item If $X$ is continuous, then
+$$
+F(b) - F(a) = \P(a < X < b) = \P(a \leq X < b) = \P(a < X\leq b) = \P(a\leq X\leq b)
+$$
+\end{enumerate}
+\textsc{Proof}. We will prove each statement in turn. (1.) was proved in exercise \textbf{2.1}.
+Doing (3) first, since we need it to prove (2).
+
+\medskip\noindent(3) By definition of complements of sets $A = \{X > x\}$ means $A^c = \{X\leq x\}$,
+and it follows that:
+$$
+\P(X > x) = \P(A) = 1 - \P(A^c) = 1 - \P(X\leq x) = 1 - F(x).
+$$
+
+\medskip\noindent(2) Assume $x < y$. We will need that $\{X > x\}\cup\{X\leq y\} = \Omega$,
+and we will also use Lemma 1.6 (in reverse).
+\begin{align*}
+    \P(x < X\leq y) &= \P(\{X > x\}\cap\{X\leq y\}) \\
+    &= \P(X > x) + \P(X\leq y) - \P(\{X > x\}\cup\{X\leq y\}) \\
+    &= 1 - F(x) + F(y) - 1 \\
+    &= F(y) - F(x)
+\end{align*}
+
+\medskip\noindent(4) Similar argument for all cases, so will just do one.
+We just need to turn the inequalities into
+strict inequalities. For continuous random variables, pointwise probabilities are 0.
+Again, we will need to use $\{X > a\}\cup\{X < b\} = \Omega$.
+
+Define $A := \{a \leq X\}$ and $B := \{X < b\}$.
+First, we make the following observation:
+\begin{align*}
+    \P(A) &= \P(\{a \leq X\}) \\
+    &= \P(\{a = X\}\cup\{a < X\}) \\
+    &= \P(\{a = X\}) + \P(\{a < X\}) - \P(\{a = X\}\cap\{a < X\}) \\
+    &= 0 + \P(A') - 0 \\
+    &= \P(A')
+\end{align*}
+where $A' = \{a < X\}$. We get 0 for the pointwise probability, since this is continuous,
+and we get 0 because the sets are disjoint. We have shown that $\P(A) = \P(A')$ and can use
+this to conclude the proof.
+\begin{align*}
+    \P(a \leq X < b) &= \P(\{a\leq X\}\cap\{X < b\})\\
+    &= \P(A\cap B) \\
+    &= \P(A) + \P(B) + \P(A\cup B) \\
+    &= \P(A) + \P(B) + \P(\Omega) \\
+    &= \P(A') + \P(B) + \P(A'\cup B) \\
+    &= \P(A'\cap B) \\
+    &= \P(a < X < b)
+    \tag*{\qed}
+    %&= \P\bigg(\Big[\{X = a\}\cup \{a < X\}\Big]\cap \{X < b\}\bigg)
+\end{align*}
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.4}\\  % PDF page 44
+$X$ has the probability density (PDF):
+$$
+f_X(x) = 
+\left\{
+    \begin{matrix}
+        1/4 & 0<x<1 \\
+        3/8 & 3<x<5 \\
+        0 & \text{otherwise}
+    \end{matrix}
+\right.
+$$
+Plot of the PDF:
+\begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            axis lines = left,
+            ymin = -0.002,
+            ymax = 0.5,
+            xlabel = $x$,
+            ylabel = {$f_X(x)$},
+        ]
+        %Section 1
+        \addplot [
+            domain=0:1, 
+            samples=10, 
+            color=blue,
+            style=ultra thick,
+        ]
+        {1/4};
+        %Section 2
+        \addplot [
+            domain=1:3, 
+            samples=10, 
+            color=blue,
+            style=ultra thick,
+        ]
+        {0};
+        %Section 3
+        \addplot [
+            domain=3:5, 
+            samples=10, 
+            color=blue,
+            style=ultra thick,
+        ]
+        {3/8};
+        %Section 4
+        \addplot [
+            domain=5:7, 
+            samples=10, 
+            color=blue,
+            style=ultra thick,
+        ]
+        {0};
+        %Vertical lines
+        \addplot +[mark=none, color=blue, style=dashed] coordinates {(1, -0) (1, 1/4)};
+        \addplot +[mark=none, color=blue, style=dashed] coordinates {(3, -0) (3, 3/8)};
+        \addplot +[mark=none, color=blue, style=dashed] coordinates {(5, -0) (5, 3/8)};
+        \end{axis}
+        \end{tikzpicture}
+\end{center}
+From the relatively simple structure, we can easily determine the area under the graph:
+$$
+A = (1)\left(\frac{1}{4}\right) + (2)\left(\frac{3}{8}\right) = \frac{2}{8} + \frac{6}{8} = 1
+$$
+(a) Finding the CDF by integrating the PDF. We will split up the integral in several parts.
+First for the case when $y\in(0,1)$:
+$$
+F_X(y) = \int_{-\infty}^y f_X(t)dt = \frac{1}{4}\int_0^y 1dt  
+= \frac{1}{4}\Big[t\Big]_0^y 
+= \frac{y}{4}
+$$
+When $y=1$ we have $F_X(1) = 1/4$.
+Next, we must consider the case $y\in(1,3)$. Here the PDF is 0, so it doesn't increase.
+It remains constant at 1/4 (since the CDF doesn't decrease).
+$$
+F_X(y) = \frac{1}{4}
+$$
+Next is the case $y\in(3,5)$. Consider the intermediary integral:
+$$
+I_1= \int_3^y\frac{3}{8}dt
+= \frac{3}{8}\Big[t\Big]_3^y
+= \frac{3y - 9}{8}
+$$
+For values $y\in(3,5)$ we start on 1/4, so the CDF in this region becomes:
+$$
+F_X(y) = \frac{3y - 9}{8} + \frac{1}{4}
+$$
+% $$
+% F_X(y) = \int_{-\infty}^y f_X(t)dt = \int_0^y \frac{1}{4}dt + \int_3^y\frac{3}{8}dt = I_1 + I_2
+% $$
+% \begin{align*}
+%     I_1 =
+%     \int_0^y \frac{1}{4}dt  
+%     = \frac{1}{4}\int_0^y 1dt  
+%     = \frac{1}{4}\Big[t\Big]_0^y 
+%     = \frac{y}{4}
+% \end{align*}
+% \begin{align*}
+%     I_2 = \int_3^y\frac{3}{8}dt 
+%     = \frac{3}{8}\int_3^y 1 dt 
+%     = \frac{3}{8}\Big[t\Big]_3^y
+%     = \frac{3y - 9}{8}
+% \end{align*}
+% With these results, we can write:
+% $$
+% F_X(y) =
+% \left\{
+%     \begin{matrix}
+%         \displaystyle \frac{y}{4} & 0 < y < 1 \\
+%         \displaystyle \frac{3y - 9}{8} & 3 < y < 5 \\
+%     \end{matrix}
+% \right.
+% $$
+% Note that when $y = 5$ we get:
+% $$
+% F_X(5) = \frac{3(5) - 9}{8} + \frac{(1)}{4} = \frac{6}{8} + \frac{2}{8} = 1
+% $$
+\newpage\noindent
+So, the full expression for the CDF becomes:
+$$
+F_X(y) =
+\left\{
+    \begin{matrix}
+        \displaystyle y/4 & y\in(0,1) \\
+        1/4 & y\in(1,3) \\
+        \displaystyle \frac{3y - 9}{8} + \frac{1}{4} & y\in(3,5) \\
+        1 & y\geq 5
+    \end{matrix}
+\right.
+$$
+Note that when $y = 5$ we get:
+$$
+F_X(5) = \frac{3(5) - 9}{8} + \frac{1}{4} = \frac{6}{8} + \frac{2}{8} = 1
+$$
+Plot of the CDF:
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        axis lines = left,
+        ymin = -0.002,
+        ymax = 1.05,
+        xlabel = $x$,
+        ylabel = {$y$},
+    ]
+    %Section 1
+    \addplot [
+        domain=0:1, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {x/4};
+    %Section 2
+    \addplot [
+        domain=1:3, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {1/4};
+    %Section 3
+    \addplot [
+        domain=3:5, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {(3*x - 9)/8 + 1/4};
+    %Section 4
+    \addplot [
+        domain=5:7, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {1};
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+% (b) Defining $Y = 1/X$ and finding the PDF of $Y$. Following the instructions
+% mentioned at equation (2.11) and example 2.46 on page 41. We usually begin by finding the set:
+% $$
+% A_y = \{x : r(x)\leq y\} = \{x : 1/x\leq y\} = \{x : x\leq 1/y\}.
+% $$
+% But following the hint we are given, we will consider the following three sets:
+% $$
+% A_1 = \frac{1}{5} \leq y \leq \frac{1}{3},\quad
+% A_2 = \frac{1}{3} \leq y \leq 1,\quad
+% A_3 = y\geq 1
+% $$
+(b) Defining $Y = 1/X$ and finding the PDF of $Y$. Following the hint we are given,
+we will consider the following three sets:
+$$
+A_1 = \frac{1}{5} \leq y \leq \frac{1}{3},\quad
+A_2 = \frac{1}{3} \leq y \leq 1,\quad
+A_3 = y\geq 1
+$$
+Where $A_1$ corresponds to $(3, 5)$, $A_2$ to $(1, 3)$
+and $A_3$ to $(0,1)$. We can express the CDF for $F_Y(y)$ in terms
+of $F_X(x)$: %First, we consider $A_1: y\in(1/5,1/3)$.
+\begin{align*}
+    F_Y(y) &= \P(Y\leq y) = \P(\frac{1}{X} \leq y) \\
+    &= \P(X \geq \frac{1}{y}) \\
+    &= 1 - \P(X\leq \frac{1}{y}) \\
+    &= 1 - F_X(\frac{1}{y})
+\end{align*}
+\newpage\noindent
+First, we consider $A_1: y\in[1/5,1/3]$, and when we input $1/y$ to
+$F_X(\cdot)$, it will be in $(3, 5)$. So:
+\begin{align*}
+    F_Y(y) &= 1 - F_X(1/y) \\
+    &= 1 - \left(\frac{3(\frac{1}{y}) - 9}{8} + \frac{1}{4}\right) \\
+    &= 1 - \frac{3 - 9y}{8y} - \frac{1}{4} \\
+    &= \frac{3}{4} + \frac{9y - 3}{8y} \\
+    &= \frac{15y - 3}{8y}
+\end{align*}
+Next, we consider $A_2: y\in[1/3,1]$. The input to $F_X(\cdot)$ will be in $(1, 3)$:
+\begin{align*}
+    F_Y(y) &= 1 - F_X(1/y) \\
+    &= 1 - \frac{1}{4} \\
+    &= \frac{3}{4}
+\end{align*}
+Next, we consider $A_3: y\geq 1$. The input to $F_X(\cdot)$ will be in $(0, 1)$:
+\begin{align*}
+    F_Y(y) &= 1 - F_X(1/y) \\
+    &= 1 - \frac{\frac{1}{y}}{4} \\
+    &= 1 - \frac{1}{4y}
+\end{align*}
+Also, whenever $y<1/5$, then $1/y > 5$ which means $F_X(\cdot) = 1$, and so:
+$$
+F_Y(y) = 1 - F_X(1/y) = 1 - 1 = 0.
+$$
+This gives a full description of the CDF for $F_Y(y)$.
+$$
+F_Y(y) =
+\left\{
+    \begin{matrix}
+        0 & y < 1/5 \\
+        \rule{0pt}{20pt}\displaystyle \frac{15y - 3}{8y} & 1/5\leq y\leq 1/3 \\
+        \rule{0pt}{20pt}\displaystyle \frac{3}{4} & 1/3\leq y \leq 1 \\
+        \rule{0pt}{20pt}\displaystyle 1 - \frac{1}{4y} & y\geq 1
+    \end{matrix}
+\right.
+$$
+
+\newpage\noindent
+Plot of CDF:
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        axis lines = left,
+        ymin = -0.002,
+        ymax = 1.05,
+        xlabel = $y$,
+        ylabel = {$F_Y(y)$},
+    ]
+    %Section 1
+    \addplot [
+        domain=0:0.2, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {0};
+    %Section 2
+    \addplot [
+        domain=0.2:0.333, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {(15*x - 3)/(8*x)};
+    %Section 3
+    \addplot [
+        domain=0.333:1, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {3/4};
+    %Section 4
+    \addplot [
+        domain=1:2, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {1 - 1/(4*x)};
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+Finally, we can find the PDF of $Y$. We differentiate each of the parts in
+the CDF. When $y\in(1/5, 1/3)$:
+\begin{align*}
+    \frac{d}{dy}\left(\frac{15y - 3}{8y}\right) &= \frac{3}{8y^2}
+\end{align*}
+When $y\geq 1$:
+\begin{align*}
+    \frac{d}{dy}\left(1 - \frac{1}{4y}\right) &= \frac{1}{4y^2}
+\end{align*}
+(All other parts are constant, so they become 0). This gives us the PDF and its plot:
+
+\medskip\noindent
+\begin{minipage}[b]{0.4\textwidth}
+    $$
+    f_Y(y) =
+    \left\{
+        \begin{matrix}
+            0 & y < 1/5 \\
+            \rule{0pt}{20pt}\displaystyle \frac{3}{8y^2} & 1/5\leq y\leq 1/3 \\
+            \rule{0pt}{15pt}\displaystyle 0 & 1/3 < y < 1 \\
+            \rule{0pt}{20pt}\displaystyle \frac{1}{4y^2} & y\geq 1
+        \end{matrix}
+    \right.
+    $$
+    \rule{0pt}{2pt}
+    \end{minipage}
+\begin{minipage}[c]{0.6\textwidth}
+    %Plot of PDF:\\
+        \begin{tikzpicture}
+        \begin{axis}[
+            axis lines = left,
+            ymin = -0.002,
+            ymax = 10,
+            xlabel = $y$,
+            ylabel = {$f_Y(y)$},
+        ]
+        %Section 1
+        \addplot [
+            domain=0:0.2, 
+            samples=10, 
+            color=blue,
+            style=ultra thick,
+        ]
+        {0};
+        %Section 2
+        \addplot [
+            domain=0.2:0.333, 
+            samples=10, 
+            color=blue,
+            style=ultra thick,
+        ]
+        {(3)/(8*x^2)};
+        %Section 3
+        \addplot [
+            domain=0.333:1, 
+            samples=10, 
+            color=blue,
+            style=ultra thick,
+        ]
+        {0};
+        %Section 4
+        \addplot [
+            domain=1:2, 
+            samples=10, 
+            color=blue,
+            style=ultra thick,
+        ]
+        {1/(4*x^2)};
+        %Vertical lines
+        \addplot +[mark=none, color=blue, style=dashed] coordinates {(1/5, -0) (1/5, 9.375)};
+        \addplot +[mark=none, color=blue, style=dashed] coordinates {(1/3, -0) (1/3, 3.375)};
+        \addplot +[mark=none, color=blue, style=dashed] coordinates {(1, -0) (1, 1/4)};
+        \end{axis}
+    \end{tikzpicture}
+\end{minipage}
+
+\newpage\noindent
+\textbf{2.5}\\  % PDF page 44
+Let $X$ and $Y$ be discrete RV. $X$ and $Y$ are independent
+if and only if $f_{X,Y}(x, y) = f_X(x)f_Y(y)$ for all $x$ and $y$. \\
+\textsc{Proof}.\\
+$\Rightarrow$) Assume that $X$ and $Y$ are independent. That means that for any $x,y$,
+we have
+$$
+\P(X=x\cap Y=y) = \P(X=x)\P(Y=y)
+$$
+Starting with the definition of the joint pdf:
+\begin{align*}
+    f_{X,Y}(x, y) &= \P(X=x, Y=y) \\
+    &= \P(X=x\cap Y=y) \\
+    &= \P(X=x)\P(Y=y) \\
+    &= f_X(x)f_Y(y)
+\end{align*}
+Which shows that $f_{X,Y}(x, y) = f_X(x)f_Y(y)$ for all $x$ and $y$.
+
+\medskip\noindent
+$\Leftarrow$) Assume that $f_{X,Y}(x, y) = f_X(x)f_Y(y)$ for all $x$ and $y$.
+By definition:
+\begin{align*}
+    f_{X,Y}(x, y) &= \P(X=x, Y=y) \\
+    &= \P(X=x\cap Y=y)
+\end{align*}
+And,
+\begin{align*}
+    f_X(x)f_Y(y) &= \P(X=x)\P(Y=y)
+\end{align*}
+From our assumption, these are equal, so $\P(X=x\cap Y=y) = \P(X=x)\P(Y=y)$ which shows that
+$X$ and $Y$ are independent.\\
+By implication both ways, the statement is proved.\qed
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.6}\\  % PDF page 45
+Let $X$ have distribution $F$ and density $f$, and let $A$ be a subset of the
+real line, e.g. $A = (a,b)$ for some $a,b\in\R$ and $a<b$. We have the indicator function
+$$
+I_A(x) =
+\left\{
+    \begin{matrix}
+        1 & x\in A \\
+        0 & x\not\in A
+    \end{matrix}
+\right.
+$$
+We will set $Y = I_A(X)$ and find the PDF and CDF of $Y$. 
+
+\medskip\noindent
+The exercise asks for a
+probability mass function, but that cannot be correct. Since $X$ has a density $f$, it is
+a continuous RV. If $X\sim U(0,1)$ and $A = (0,1)$, then $Y = X$ and it will be a uniform
+variable with a continuous distribution, so not necessarily discrete.
+
+\medskip\noindent
+And if it can be a continuous distribution, what happens if we define $A = \mathbb{Q}\subset\R$?
+There will be an infinite number of points in any interval with measure 0. Then we cannot define
+a PDF at all... Poorly formulated exercise in my opinion! Need to fill up with 
+extra assumptions? 
+
+\medskip\noindent
+Skipping for now.
+
+\newpage\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.7}\\  % PDF page 45
+Let $X$ and $Y$ be independent and suppose that $X,Y\sim U(0,1)$.
+For $Z = \min(X, Y)$ we will find the density $f_Z(z)$ for $Z$. Following the hint, we will first
+find $\P(Z > z)$. Since any observations of $x,y\in(0,1)$, then we can immediately see that
+$\P(Z > 0) = 1$ and $\P(Z > 1) = 0$. But what happens for other values? Best way to find out is
+with some illustrations. Here are plots of the cases $\P(Z > 1/2)$, $\P(Z > 1/4)$ and $\P(Z > 3/4)$.
+
+\begin{figure}[h]
+    \centering
+\begin{minipage}[t]{.3\textwidth}
+    \centering
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% P(Z > 1/2)
+\begin{tikzpicture}[
+    scale=3,
+    %axis/.style={very thick, ->, >=stealth'},
+    important line/.style={thick},
+    dashed line/.style={dashed, thin},
+    pile/.style={thick, ->, >=stealth', shorten <=2pt, shorten
+    >=2pt},
+    every node/.style={color=black}
+    ]
+    % axis
+    \draw[thick] (-0.1,0)  -- (1.1,0) node(xline)[below]
+        {$X$};
+    \draw[thick] (0,-0.1) -- (0,1.1) node(yline)[left] {$Y$};
+    % Values
+    \draw (0,1) node(xline)[left]{$1$};
+    \draw (0,0.5) node(xline)[left]{$1/2$};
+    \draw (1,0) node(xline)[below]{$1$};
+    \draw (0.5,0) node(xline)[below]{$1/2$};
+    % Fill
+    \fill[fill=gray!50] (0.5,0.5) -- (0.5,1) -- (1,1) -- (1,0.5) -- cycle;
+    % Box
+    \draw[important line] (0,0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+    % Lines
+    \draw (0.5,0) coordinate (A) -- (0.5,1);
+    \draw (0,0.5) coordinate (C) -- (1,0.5);
+\end{tikzpicture}  
+\end{minipage}%
+\begin{minipage}[t]{0.3\textwidth}
+    \centering 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% P(Z > 1/4)
+\begin{tikzpicture}[
+    scale=3,
+    %axis/.style={very thick, ->, >=stealth'},
+    important line/.style={thick},
+    dashed line/.style={dashed, thin},
+    pile/.style={thick, ->, >=stealth', shorten <=2pt, shorten
+    >=2pt},
+    every node/.style={color=black}
+    ]
+    % axis
+    \draw[thick] (-0.1,0)  -- (1.1,0) node(xline)[below]
+        {$X$};
+    \draw[thick] (0,-0.1) -- (0,1.1) node(yline)[left] {$Y$};
+    % Values
+    \draw (0,1) node(xline)[left]{$1$};
+    \draw (0,0.25) node(xline)[left]{$1/4$};
+    \draw (1,0) node(xline)[below]{$1$};
+    \draw (0.25,0) node(xline)[below]{$1/4$};
+    % Fill
+    \fill[fill=gray!50] (0.25,0.25) -- (0.25,1) -- (1,1) -- (1,0.25) -- cycle;
+    % Box
+    \draw[important line] (0,0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+    % Lines
+    \draw (0.25,0) coordinate (A) -- (0.25,1);
+    \draw[style=dashed] (0.5,0) coordinate (A) -- (0.5,1);
+    \draw[style=dashed] (0.75,0) coordinate (A) -- (0.75,1);
+    \draw (0,0.25) coordinate (C) -- (1,0.25);
+    \draw[style=dashed] (0,0.5) coordinate (C) -- (1,0.5);
+    \draw[style=dashed] (0,0.75) coordinate (C) -- (1,0.75);
+\end{tikzpicture}
+\end{minipage}%
+\begin{minipage}[t]{0.3\textwidth}
+    \centering
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% P(Z > 3/4)
+    \begin{tikzpicture}[
+        scale=3,
+        %axis/.style={very thick, ->, >=stealth'},
+        important line/.style={thick},
+        dashed line/.style={dashed, thin},
+        pile/.style={thick, ->, >=stealth', shorten <=2pt, shorten
+        >=2pt},
+        every node/.style={color=black}
+        ]
+        % axis
+        \draw[thick] (-0.1,0)  -- (1.1,0) node(xline)[below]
+            {$X$};
+        \draw[thick] (0,-0.1) -- (0,1.1) node(yline)[left] {$Y$};
+        % Values
+        \draw (0,1) node(xline)[left]{$1$};
+        \draw (0,0.75) node(xline)[left]{$3/4$};
+        \draw (1,0) node(xline)[below]{$1$};
+        \draw (0.75,0) node(xline)[below]{$3/4$};
+        % Fill
+        \fill[fill=gray!50] (0.75,0.75) -- (0.75,1) -- (1,1) -- (1,0.75) -- cycle;
+        % Box
+        \draw[important line] (0,0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+        % Lines
+        \draw[style=dashed] (0.25,0) coordinate (A) -- (0.25,1);
+        \draw[style=dashed] (0.5,0) coordinate (A) -- (0.5,1);
+        \draw (0.75,0) coordinate (A) -- (0.75,1);
+        \draw[style=dashed] (0,0.25) coordinate (C) -- (1,0.25);
+        \draw[style=dashed] (0,0.5) coordinate (C) -- (1,0.5);
+        \draw (0,0.75) coordinate (C) -- (1,0.75);
+    \end{tikzpicture}
+\end{minipage}
+\end{figure}
+If we simulate lots of $X$ and $Y$ values, we see that about 1/4th of them will have both $X$ and
+$Y$ values larger than 1/2, so $\P(Z>1/2) = 1/4$. Similarly, we get $\P(Z>1/4) = 9/16$ and
+$\P(Z > 3/4) = 1/16$. Confirming this with a simulation.
+
+\begin{lstlisting}[style=RSyntax]
+# 2.7 - Simulating U(0,1)
+N = 100000;X = runif(N);Y = runif(N)
+
+Z = pmin(X, Y) # This is: Z = min{X, Y}
+
+# Comparing simulated vs. theoretical results
+sum(Z > 0.5)/N
+1/4
+sum(Z > 0.25)/N
+9/16
+sum(Z > 0.75)/N
+1/16   
+\end{lstlisting}
+\begin{Verbatim}[fontsize=\small]
+> # Comparing simulated vs. theoretical results
+> sum(Z > 0.5)/N
+[1] 0.24888
+> 1/4
+[1] 0.25
+
+> sum(Z > 0.25)/N
+[1] 0.56156
+> 9/16
+[1] 0.5625
+
+> sum(Z > 0.75)/N
+[1] 0.06205
+> 1/16
+[1] 0.0625
+\end{Verbatim}
+
+\newpage\noindent
+By inspecting the images on the previous page, we can determine the 'shape' of the probabilities.
+For $Z > 1/4$ we remove the union of $X \leq 1/4$ and $Y\leq 1/4$. We define $A = \{X \leq z\}$ and
+$B = \{Y\leq z\}$, and can write the general case as:
+\begin{align*}
+    \P(Z > z) &=
+    1 - \P(\{X \leq z\}\cup \{Y \leq z\}) \\
+    &= 1 - \P(A\cup B) \\
+    &= 1 - \big[\P(A) + \P(B) - \P(A\cap B)\big] \\
+    &= 1 - \big[\P(A) + \P(B) - \P(A)\P(B)\big]
+\end{align*}
+Where we used Lemma 1.6, and the fact that $X$ and $Y$ are independent. By using the probability
+law of complements, we can find the expression for $\P(Z\leq z)$.
+$$
+\P(Z\leq z) = \P(X\leq z) + \P(Y\leq z) - \P(X\leq z)\P(Y\leq z)
+$$
+The CDF for a uniform distribution on $U(a,b)$ is:
+$$
+F(z) = \frac{z-a}{b-a} \imp F_X(z) = F_Y(z) = \frac{z-0}{1-0} = z
+$$
+Which means:
+$$
+F_Z(z) = F_X(z) + F_Y(z) - F_X(z)F_Y(z) = 2z - z^2
+$$
+We can confirm our illustrations and simulated examples again by noting that:
+\begin{align*}
+    F_Z(1/2) &= \frac{1}{2} + \frac{1}{2} - \left(\frac{1}{2}\cdot\frac{1}{2}\right) = 1 - \frac{1}{4} = \frac{3}{4} \\
+    F_Z(1/4) &= \frac{1}{4} + \frac{1}{4} - \left(\frac{1}{4}\cdot\frac{1}{4}\right) = \frac{8}{16} - \frac{1}{16} = \frac{7}{16}\\
+    F_Z(3/4) &= \frac{3}{4} + \frac{3}{4} - \left(\frac{3}{4}\cdot\frac{3}{4}\right) = \frac{24}{16} - \frac{9}{16} = \frac{15}{16}
+\end{align*}
+which gives us the opposite results as expected (since we simulated and illustrated $\P(Z > z)$).
+The PDF $f_Z(z)$ is the derivative of $F_Z(z)$.
+Including PDF-plot and histogram of the simulated $Z$s.
+$$
+f_Z(z) = \frac{d}{dz}\Big(F_Z(z)\Big) = 2 - 2z.
+$$
+%Including a plot of the PDF as well as the histogram of the simulated $Z$ values.
+\begin{figure}[H]
+    \begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+    \begin{axis}[
+        width=0.8\textwidth,
+        axis lines = left,
+        ymin = -0.002,
+        ymax = 2.1,
+        xlabel = $z$,
+        ylabel = {$f_Z(z)$},
+    ]
+    %Section 1
+    \addplot [
+        domain=0:1, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {2 - 2*x};
+    \end{axis}
+\end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \includegraphics[scale=0.55]{ch2_2.7b.pdf}
+    \end{minipage}
+\end{figure}
+
+\newpage\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.8}\\  % PDF page 45
+The RV $X$ has CDF $F$. Finding the CDF of $X^+ = \max\{0, X\}$.
+
+\medskip\noindent
+From the definition of CDF:
+\begin{align*}
+    F_{X^+}(u) &=  \P\big(\max(0, X)\leq u\big)\\
+    &= \P\Big(\{\omega\in \Omega \;:\; X(\omega)\leq u\;\text{and}\; u\geq 0\}\Big)
+\end{align*}
+We must consider two cases. When $u < 0$:
+\begin{align*}
+    F_{X^+}(u) &= \P\Big(\{\omega\in \Omega \;:\; X(\omega)\leq u\;\text{and}\; u\geq 0\}\Big) \\
+    &= \P(\emptyset) \\
+    &= 0
+\end{align*}
+When $u\geq 0$:
+\begin{align*}
+    F_{X^+}(u) &= \P\Big(\{\omega\in \Omega \;:\; X(\omega)\leq u\;\text{and}\; u\geq 0\}\Big) \\
+    &= \P\Big(\{\omega\in \Omega \;:\; X(\omega)\leq u\}\Big)  \\
+    &= \P(X\leq u) \\
+    &= F_X(u)
+\end{align*}
+So in summary:
+$$
+F_{X^+}(u) =
+\left\{
+    \begin{matrix}
+        0 & u<0 \\
+        F_X(u) & u\geq0 \\
+    \end{matrix}
+\right.
+$$
+
+% \medskip\noindent
+% Illustration of what happens when we go from $X$ to $X^+$ for some continuous
+% distribution, such as $X\sim N(0,1)$.
+% \begin{figure}[H]
+%     \begin{minipage}{0.5\textwidth}
+% \begin{tikzpicture}
+%     \begin{axis}[
+%         width=\textwidth,
+%         axis lines = left,
+%         ymin = -0.002,
+%         ymax = 0.5,
+%         xlabel = $x$,
+%         ylabel = {$f_X(x)$},
+%     ]
+%     %Section 1
+%     \addplot [
+%         domain=-2:2, 
+%         samples=50, 
+%         color=blue,
+%         style=ultra thick,
+%     ]
+%     {1/(sqrt(2*3.1415))*exp(-0.5*x^2)};
+%     \end{axis}
+% \end{tikzpicture}
+%     \end{minipage}
+%     \begin{minipage}{0.5\textwidth}
+%         \begin{tikzpicture}
+%             \begin{axis}[
+%                 width=\textwidth,
+%                 axis lines = left,
+%                 ymin = -0.002,
+%                 ymax = 0.5,
+%                 xlabel = $x$,
+%                 ylabel = {$f_{X^+}(x)$},
+%             ]
+%             %Section 1
+%             \addplot [
+%                 domain=-2:0, 
+%                 samples=2, 
+%                 color=blue,
+%                 style=ultra thick,
+%             ]
+%             {0};
+%             %Section 2
+%             \addplot [
+%                 domain=0:2, 
+%                 samples=50, 
+%                 color=blue,
+%                 style=ultra thick,
+%             ]
+%             {1/(sqrt(2*3.1415))*exp(-0.5*x^2)};
+%             %Vertical lines
+%             \addplot +[mark=none, color=blue] coordinates {(0, -0) (0, 0.4)};
+%             \end{axis}
+%         \end{tikzpicture}
+%     \end{minipage}
+% \end{figure}
+% We split up the $X$ into negative and positive values, which becomes a disjoint set.
+% $$
+% \{X\leq x : x\in\R\} = 
+% \{X\leq x : x\leq 0\} \cup \{0 < X\leq x : x>0\}
+% $$
+% Since they are disjoint:
+% $$
+% \P(X\leq x) = \P(X \leq 0) + \P(0<X\leq x) = F(0) + F(x) - F(0)
+% $$
+% We can split up the CDF:
+% $$
+% F(X\leq x) = F(X\leq 0)
+% $$
+% \medskip\noindent
+% One of the defining properties of a PDF is that it must be greater than or equal to 0.
+% Since the CDF if the integral of the PDF, it will always be greater than or equal to 0
+% as well.
+%%%% No, wait - this is incorrect. We could have e.g. U(-1, 1) or N(0, 1) in which case many
+%%%% X will be negative. So the PDF is never negative, that is true, but that says
+%%%% nothing about the X.
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.9}\\  % PDF page 45
+We have $X\sim \text{Exp}(\beta)$. The PDF is given by:
+$$
+f(x) = \frac{1}{\beta}e^{-x/\beta},\quad x > 0
+$$
+Finding the CDF by integrating the PDF.
+\begin{align*}
+    F(y) &= \int_{-\infty}^y f(x)dx \\
+    &= \frac{1}{\beta}\int_0^y e^{-x/\beta}dx\\
+    &= \frac{1}{\beta}\big[-\beta e^{-x/\beta}\big]_0^y\\
+    &= \big[-e^{-x/\beta}\big]_0^y \\
+    &= 1 - e^{-y/\beta}
+\end{align*}
+To find the inverse $F^{-1}(q)$ we set $q = F(y)$ and solve for $y$.
+$$
+q = 1 - e^{-y/\beta}
+\imp
+y = -\beta\log(1 - q)
+\imp
+F^{-1}(q) = -\beta\log(1 - q)
+$$
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.10}\\  % PDF page 45
+If $X$ and $Y$ are independent, then $g(X)$ and $h(Y)$ are independent for some functions
+$g$ and $h$.
+
+\medskip\noindent
+\textsc{Proof}.
+Let $X$ and $Y$ be some arbitrary random variables, and let $x$ and $y$ be
+values in the range of $g$ and $h$ such that $g(X) = x$ and $h(Y) = y$. Then:
+\begin{align*}
+    \P(g(X) = x, h(Y) = y) &=
+    \P(X = g^{-1}(x), Y = h^{-1}(y)) \\
+\shortintertext{By independence of $X$ and $Y$.}
+&= \P(X = g^{-1}(x))\P(Y = h^{-1}(y)) \\
+&= \P(g(X) = x)\P(h(Y) = y) 
+\end{align*}
+which shows that $g$ and $h$ satisfies the condition for independence.\qed
+% When $X$ and $Y$ are independent, we want to show that the following is true:
+% $$
+% \P(g(X)\cap h(Y)) = \P(g(X))\P(h(Y))
+% $$
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.11}\\  % PDF page 45
+Tossing a coin which has probability $p$ of getting H. We let $X$ denote the
+number of heads and $Y$ the number of tails.
+
+\medskip\noindent(a) Showing that $X$ and $Y$ are dependent. First it will be helpful
+to consider a simplified case where we have $N=1$ and $N=2$ coin tosses, and assuming $p=1/2$.
+\begin{figure}[H]
+    \begin{minipage}{0.5\textwidth}
+        $N = 1$ Tosses \\
+        $$
+            \begin{tabular}{c|c|c|c}
+                & $Y=0$ & $Y=1$ & \\
+                \hline
+                $X=0$ & 0 & $1/2$ & $1/2$ \\
+                \hline
+                $X=1$ & $1/2$ & 0 & $1/2$ \\
+                \hline
+                & $1/2$ & $1/2$ & 1
+            \end{tabular}
+        $$
+        \rule{0pt}{5pt}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        $N = 2$ Tosses \\
+        $$
+            \begin{tabular}{c|c|c|c|c}
+                & $Y=0$ & $Y=1$ & $Y=2$ & \\
+                \hline
+                $X=0$ & 0 & 0 & 1/4 & $1/4$ \\
+                \hline
+                $X=1$ & 0 & 1/2 & 0 & $1/2$ \\
+                \hline
+                $X=2$ & $1/4$ & 0 & 0 & $1/4$ \\
+                \hline
+                & $1/4$ & $1/2$ & $1/4$ & 1
+            \end{tabular}
+        $$
+    \end{minipage}
+\end{figure}
+In the case of $N=2$, we see that $f(0, 2) = 1/4$ while $f_X(0)f_Y(2) = 1/16$. This will be the
+inspiration for how we show it in the general case with $N$ tosses and probability $p$ of heads.
+
+\medskip\noindent
+We only need to show one specific case where $\P(X=x, Y=y) \not= \P(X=x)\P(Y=y)$ to show that these
+values are dependent. The total number of tosses will be $N = X + Y$ and we compare the cases where
+we get $N$ heads. In that case, using the Multinomial distribution:
+$$
+\P(X=N, Y=0) = {N\choose N,0} =p^N(1-p)^0 = p^N,
+$$
+but with the two Binomial distributions:
+$$
+\P(X=N)\P(Y=0) = {N\choose N}p^N(1-p)^0\times {N\choose 0}p^0(1-p)^N = p^N(1-p)^N.
+$$
+These are not equal, showing that $X$ and $Y$ are dependent variables.
+
+
+\newpage\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+(b) Now we have $N\sim\text{Poisson}(\lambda)$, where $N = X + Y$ for $X$ heads
+and $Y$ tails. Show that these values are now independent.
+
+\medskip\noindent\emph{Current solution, but not sure it's correct...}\\
+Assuming $X=x$ and $Y=y$. Then:
+\begin{align*}
+    \P(X=x\cap Y=y) &= \P(X=x\cap Y=y\cap N = x+y) \\
+    &= \P(X=x\cap Y=y \mid N = x+y)\cdot\P(N = x+y) \\
+    &= {x+y\choose x}p^x(1-p)^y\cdot e^{-\lambda}\frac{\lambda^{x+y}}{(x+y)!} \\
+    &= \frac{\cancel{(x+y)!}}{x!y!}p^x(1-p)^y\cdot e^{-\lambda}\frac{\lambda^x\lambda^y}{\cancel{(x+y)!}} \\
+    &= e^{-\lambda}\frac{p^x\lambda^x}{x!}\cdot\frac{(1-p)^y\lambda^y}{y!} \\
+    &= e^{-\lambda p}\frac{p^x\lambda^x}{x!}\cdot e^{-\lambda(1-p)}\frac{(1-p)^y\lambda^y}{y!} \\
+    &= \P(X=x | \lambda p)\cdot\P(Y=y|\lambda(1-p)) \\
+    &= \P(X=x)\P(Y=y)
+\end{align*}
+Which shows we have independence. We used:
+$$
+e^{-\lambda} = e^{-\lambda(p - p + 1)} = e^{-\lambda p + \lambda p - \lambda}
+= e^{-\lambda p}e^{\lambda p - \lambda} = e^{-\lambda p}e^{-\lambda(1-p)}.
+$$
+Also, we made the assumption that $\P(X=x\cap Y=y \mid N = x+y)$ is Binomial. But I think this is
+only true when we can assume that $X$ and $Y$ are independent... which is what we are trying to show.
+Will review this later... hopefully!
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.12} \textsc{Theorem} 2.33\\  % PDF page 45
+Suppose that the range of $X$ and $Y$ is a (possibly infinite)
+rectangle. If $f(x, y) = g(x)h(y)$ for some functions $g$ and $h$ (not necessarily
+probability density functions) then $X$ and $Y$ are independent.
+
+\medskip\noindent\textsc{Proof}. From the joint PDF, we can find the marginal distributions:
+$$
+f_X(x) = \int f(x, y) dy, \quad
+f_Y(y) = \int f(x, y) dx
+$$
+By applying these integrals to both sides of the equality:
+$$
+\int f(x, y) dy = g(x)\int h(y) dy \imp f_X(x) = g(x)
+$$
+$$
+\int f(x, y) dx = h(y)\int g(x) dx \imp f_Y(y) = h(y)
+$$
+We get $g(x)$ and $h(y)$ since they are equal to $f(x,y)$ over the entire 'rectangle' and must therefore
+integrate to 1. This leaves us with: $f(x, y) = g(x)h(y) = f_X(x)f_Y(y)$, and by the results in exercise 2.5,
+this means that $X$ and $Y$ are independent. \qed
+
+\newpage\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.13}\\  % PDF page 45
+(a) Finding the PDF of $Y = e^X$ when $X\sim N(0,1)$.
+\begin{align*}
+    F_Y(y) &= \P(Y\leq y) = \P(e^X \leq y) \\
+    &= \P(X\leq \log(y)) = F_X(\log(y))
+\end{align*}
+We simply get the standard normal distribution with $\log(y)$ as input.
+Differentiating to get the PDF:
+$$
+f_Y(y) = 
+\frac{d}{dy} F_X(\log(y)) = f_X(\log(y))\cdot \frac{1}{y}= 
+\frac{1}{y\sqrt{2\pi}}\exp\left(-\frac{1}{2}\big(\log(y)\big)^2\right)
+$$
+Plotting the function:
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+    \begin{axis}[
+        width=0.9\textwidth,
+        axis lines = left,
+        ymin = -0.002,
+        ymax = 0.75,
+        xlabel = $y$,
+        ylabel = {$\frac{1}{y}\cdot f_X(\log(y))$},
+    ]
+    %Section 1
+    \addplot [
+        domain=-1:8, 
+        %domain=-1:5, 
+        samples=400, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {(1/(x*sqrt(2*pi)))*exp(-0.5*ln(x)*ln(x))};
+    \end{axis}
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\end{minipage}
+\end{figure}
+(b) Plotting histogram of simulated results. Comparable to the plot above.
+\begin{figure}[H]
+    \begin{minipage}{0.5\textwidth}
+        \begin{center}
+            \begin{figure}[H]
+            \includegraphics[scale=0.65]{ch2_2.13b.pdf}
+            \end{figure}
+        \end{center}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+    \begin{lstlisting}[style=RSyntax]
+x = rnorm(10000)
+y = exp(x)
+pdf("~/AllStatistics/files/ch2_2.13b.pdf",
+     width = 4.7747, height = 4)
+d = density(y)
+hist(y, breaks = 200, xlim = c(0, 8),
+     prob=TRUE)
+lines(density(y), col="red", xlim=c(0,8))
+dev.off()
+    \end{lstlisting}
+    \rule{0pt}{55pt}
+\end{minipage}
+\end{figure}
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.14}\\  % PDF page 45
+We let $(X,Y)$ be uniformly distributed on the unit disk:
+$\{(x,y) : x^2 + y^2 \leq 1\}$. Find the CDF and PDF of
+$R = \sqrt{X^2 + Y^2}$.
+
+\medskip\noindent
+First, let's write some code in order to simulate the data, which are random points contained
+within the unit circle. And then use that to simulate $R$ and view the histogram. Plots and
+code can be found on the next page. By inspection of the histogram it is clear that $f_R(r) = 2r$
+which means $F_R(r) = r^2$.
+
+\medskip\noindent
+Following the general recipe for transformation of multiple random variables. We will define
+the function $r(X,Y) = \sqrt{X^2 + Y^2}$. %And we will use that $Y \leq \sqrt{1 - X^2}$.
+\begin{align*}
+    F_R(r) &= \P(R\leq r) = \P(r(X,Y)\leq r)
+    %= \P(\sqrt{X^2 + Y^2}\leq r)\\
+    = \P(X^2 + Y^2\leq r^2) = \int\int_{A_r}f_{X,Y}(x,y)dxdy
+    %= \P(X^2 + Y^2\leq r^2) \\ &= \P(X^2 + )
+\end{align*}
+Finding the set $A_r$ which in this case is still the unit circle,
+since $\sqrt{x^2 + y^2} \leq 1 \;\Longrightarrow\; x^2 + y^2 \leq 1$.
+
+Since the area of the unit circle is $\pi$, and since a uniform distribution means
+the probability is equal everywhere, it follows that:
+$$
+f_{X,Y}(x,y) = \frac{1}{\pi}.
+$$
+As we saw, we must integrate this function over the circle: $\{(x,y) : x^2 + y^2 < r\}$
+for some $0\leq r \leq 1$.
+This is easiest when calculating the integral in polar coordinates, so we introduce
+$0\leq \theta\leq 2\pi$ and $0\leq \rho\leq r$ and change $dxdy = \rho d\rho d\theta$.
+So:
+\begin{align*}
+   F_R(r) &= \frac{1}{\pi}\int_{0}^{2\pi}\int_{0}^{r} \rho d\rho d\theta \\
+   &= \frac{1}{\pi}\int_{0}^{2\pi}\Big[\frac{\rho^2}{2}\Big]_0^r d\theta \\
+   &= \frac{1}{\pi}\int_{0}^{2\pi}\frac{r^2}{2} d\theta \\
+   &= \frac{r^2}{2\pi}\int_{0}^{2\pi}(1) d\theta \\
+   &= \frac{r^2}{2\pi}\big[\theta\big]_{0}^{2\pi} \\
+   &= \frac{r^2}{2\pi}\cdot 2\pi \\
+   &= \rule{0pt}{15pt}r^2 
+\end{align*}
+The CDF is $F_R(r) = r^2$ for $0\leq r\leq 1$. By differentiating this, we get the PDF.
+$$
+f_R(r) = \frac{d}{dr}F_R(r) = 2r,
+$$
+also in the interval $0\leq r\leq 1$. This confirms the results we found by simulating
+which are found on the next page.
+% When $x^2 + y^2 = z$ for some $z\leq 1$, we have $y^2 = 1 - x^2$. So:
+% \begin{align*}
+%     F_R(r) &= \int_0^r\int_0^r x^2 + y^2 dxdy \\
+%     &= \int_0^r\int_0^r x^2 + 1 - x^2 dxdy \\
+%     &= \int_0^r\int_0^r 1 dxdy \\
+%     &= \int_0^r \big[x\big]_0^r dy \\
+%     &= r\int_0^r 1 dy \\
+%     &= r\big[y\big]_0^r \\
+%     &= r^2
+%     % &= \int_0^r\big[\frac{1}{3}x^3 + y^2x \big]_0^rdy \\
+%     % &= \int_0^r\frac{1}{3}r^3 + ry^2 dy \\
+%     % &= \big[\frac{1}{3}r^3y + \frac{1}{3}y^3r\big]_0^r \\
+%     % &= \frac{1}{3}r^4 + \frac{1}{3}r^4 \\
+% \end{align*}
+% The CDF is $F_R(r) = r^2$ for $0\leq r\leq 1$. By differentiating this, we get the PDF.
+% $$
+% f_R(r) = \frac{d}{dr}F_R(r) = 2r,
+% $$
+% also in the interval $0\leq r\leq 1$. This confirms the results we found by simulating
+% which are found on the next page.
+
+
+\newpage\noindent
+\textbf{Plots and Code for 2.14}
+\begin{figure}[H]
+    \begin{minipage}[t]{0.5\textwidth}
+    \begin{lstlisting}[style=RSyntax]
+simulateUnitCircle = function(N) {  
+    TR = runif(N)
+    UR = runif(N); VR = runif(N)
+    t = 2*pi*TR
+    u = UR+VR
+    u[u > 1] = 2 - u[u > 1]
+    r = u
+    X = r*cos(t)
+    Y = r*sin(t)
+    retVal = list()
+    retVal$X = X 
+    retVal$Y = Y
+    return(retVal)
+}
+simVal = simulateUnitCircle(1000)
+X = simVal$X
+Y = simVal$Y
+pdf("~/AllStatistics/files/ch2_2.14.pdf",
+    width = 4, height = 4)
+plot(X, Y)
+dev.off()
+    \end{lstlisting}
+    \rule{0pt}{55pt}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+\qquad Result from simulation:
+    \begin{center}
+        \begin{figure}[H]
+        \includegraphics[scale=0.65]{ch2_2.14.pdf}
+        \end{figure}
+    \end{center}
+\end{minipage} \\
+    \begin{minipage}{0.5\textwidth}
+    \begin{lstlisting}[style=RSyntax]
+simVal = simulateUnitCircle(50000)
+R = sqrt(simVal$X^2 + simVal$Y^2)
+pdf("~/AllStatistics/files/ch2_2.14b.pdf",
+    width = 4, height = 4)
+hist(R, breaks = 40, prob = TRUE)
+plot(X, Y)
+dev.off()
+    \end{lstlisting}
+    \rule{0pt}{55pt}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \begin{center}
+        \begin{figure}[H]
+        \includegraphics[scale=0.7]{ch2_2.14b.pdf}
+        \end{figure}
+    \end{center}
+\end{minipage}
+\end{figure}
+
+\newpage\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.15}\\  % PDF page 45
+Let $X$ have a continuous, strictly increasing CDF $F$, and set $Y = F(X)$.
+Find the density of $Y$.
+
+By definition of the CDF, $F: \R\rightarrow [0,1]$ which will be the domain
+of $Y$. Since $F$ is strictly increasing, then $F(X_1) < F(X_2)$ if $X_1 < X_2$,
+but the important property is that $F$ must be \emph{invertible}. For any $y\in[0,1]$
+we get the following:
+\begin{align*}
+    F_Y(y) = \P(Y\leq y) &= \P(F(X) \leq y) \\
+    &= \P(X\leq F^{-1}(y)) 
+    = F(F^{-1}(y)) = y
+\end{align*}
+Since $F_Y(y) = y$, then the density is $f_Y(y) = 1$, the derivative. From these observations,
+we can conclude that $Y\sim U(0,1)$.
+
+Next, if $U\sim U(0,1)$ and $X = F^{-1}(U)$, then $X$ has $F$ as its CDF. %Using that $F_U(y) = \P(U\leq y) = y$.
+\begin{align*}
+    \P(F^{-1}(U)\leq x) &= \P(X \leq x) = F(x) \imp X\sim F
+\end{align*}
+
+Writing a program that generates Exp($\beta$) values. Using the result found in exercise 2.9.
+
+\begin{figure}[H]
+    \begin{minipage}{0.5\textwidth}
+        \begin{lstlisting}[style=RSyntax]
+simExp = function(beta, N){
+    U = runif(N)
+    return(-beta*log(1 - U))
+}
+# Simulating
+expRND = simExp(beta = 2/3, N = 50000)
+# Making plot
+hist(expRND, breaks=80,
+    xlim=c(0, 5), prob=TRUE)
+lines(density(expRND), col="red", xlim=c(0,5), lwd=2)
+        \end{lstlisting}
+        \begin{center}
+            \begin{figure}[H]
+            \includegraphics[scale=0.7]{ch2_2.15.pdf}
+            \end{figure}
+        \end{center}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip
+        \medskip\noindent
+        \quad Plot of the exponential distribution for $\beta = 2/3$.
+        $$
+f_X(x) = 1.5\exp{(1.5x)}
+        $$
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=0.9\textwidth,
+                axis lines = left,
+                ymin = -0.002,
+                ymax = 1.3,
+                xlabel = $x$,
+                ylabel = {$f_X(x)$},
+            ]
+            %Section 1
+            \addplot [
+                domain=-1:5, 
+                samples=400, 
+                color=blue,
+                style=ultra thick,
+            ]
+            {1.5*exp(-1.5*x)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.16}\\  % PDF page 45
+If $X\sim\text{Poisson}(\lambda_1)$ and $X\sim\text{Poisson}(\lambda_2)$, and $X$ and $Y$
+are independent, then the distribution of $X$ given that $X+Y = n$ is
+Binomial($n, \rho$) where $\rho = \lambda_1/(\lambda_1 + \lambda_2)$. (Changed some variable names).
+
+\medskip\noindent\textsc{Proof}.
+By definition of conditional probability, by applying hint 1, by independence and
+by using the fact that $X$ + $Y$ is a Poisson distribution with $\lambda_1 + \lambda_2$.
+\begin{align*}
+    \P(X = x | X + Y = n) &= \frac{\P(X = x \cap X + Y = n)}{\P(X + Y = n)} \\
+    &= \frac{\P(X = x \cap Y = n - x)}{\P(X + Y = n)} \tag{Hint}\\
+    &= \frac{\P(X = x)\P(Y = n - x)}{\P(X + Y = n)} \tag{Independence}
+\end{align*}
+Each of these terms are known:
+\begin{align*}
+\P(X = x) &= e^{-\lambda_1}\cdot\frac{\lambda_1^x}{x!} \\
+\P(Y = n - x) &= e^{-\lambda_2}\cdot\frac{\lambda_2^{(n-x)})}{(n-x)!} \\
+\P(X + Y = n) &= e^{-(\lambda_1 + \lambda_2)}\cdot\frac{(\lambda_1 + \lambda_2)^n}{n!} 
+\end{align*}
+We can invert the last equation:
+$$
+\frac{1}{\P(X + Y = n)} = e^{\lambda_1 + \lambda_2}\cdot\frac{n!}{(\lambda_1 + \lambda_2)^n} 
+$$
+Putting it all together, we can complete the justification.
+\begin{align*}
+    \P(X = x | X + Y = n) &= \frac{\P(X = x)\P(Y = n - x)}{\P(X + Y = n)} \\
+    &= \left(e^{-\lambda_1}\cdot\frac{\lambda_1^x}{x!}\right)
+    \left(e^{-\lambda_2}\cdot\frac{\lambda_2^{(n-x)})}{(n-x)!}\right)
+    \left(e^{\lambda_1 + \lambda_2}\cdot\frac{n!}{(\lambda_1 + \lambda_2)^n} \right) \\
+    &= \left(\frac{\lambda_1^x}{x!}\right)
+    \left(\frac{\lambda_2^{(n-x)})}{(n-x)!}\right)
+    \left(\frac{n!}{(\lambda_1 + \lambda_2)^x(\lambda_1 + \lambda_2)^{(n-x)}} \right) \\
+    &= \left(\frac{n!}{x!(n-x)!}\right)
+    \left(\frac{\lambda_1}{\lambda_1 + \lambda_2}\right)^x
+    \left(\frac{\lambda_2}{\lambda_1 + \lambda_2}\right)^{(n-x)} \\
+    &= {n\choose x}
+    \left(\frac{\lambda_1}{\lambda_1 + \lambda_2}\right)^x
+    \left(\frac{\lambda_2}{\lambda_1 + \lambda_2}\right)^{(n-x)} \\
+    &= {n\choose x}
+    \left(\frac{\lambda_1}{\lambda_1 + \lambda_2}\right)^x
+    \left(1 - \frac{\lambda_1}{\lambda_1 + \lambda_2}\right)^{(n-x)} \\
+    &= {n\choose x}
+    \rho^x
+    (1 - \rho)^{(n-x)}   \sim \text{Binomial}(n, \rho)
+\end{align*}
+for $\rho = \lambda_1/(\lambda_1 + \lambda_2)$. \qed
+
+
+\newpage\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.17}\\  % PDF page 46
+The joint probability density is:
+$$
+f_{X,Y}(x,y) = 
+\left\{
+    \begin{matrix}
+        c(x + y^2) & 0\leq x\leq 1, 0\leq y\leq 1 \\
+        0 & \text{otherwise}
+    \end{matrix}
+\right.
+$$
+Calculating $\P(X < 1/2 \,|\, Y = 1/2)$.
+
+\medskip\noindent
+We begin by calculating the marginal distribution for $f_Y(y)$.
+$$
+f_Y(y) = \int_0^1 cx + cy^2 dx = c\int_0^1 x dx + c\int_0^1 y^2 dx =
+c\big[ \frac{x^2}{2}\big]_0^1 + cy^2\big[x\big]_0^1 = c\left(\frac{1}{2} + y^2\right)
+$$
+Following the steps in example 2.38.
+$$
+f_{X|Y}(x|y) = \frac{f_{X,Y}(x,y)}{f_Y(y)} = \frac{c(x + y^2)}{c\left(\frac{1}{2} + y^2\right)}
+= \frac{x + y^2}{\frac{1}{2} + y^2}
+$$
+Calculating the conditional probability:
+\begin{align*}
+    \P(X < 1/2 | Y = 1/2) &= \int_0^{1/2} f_{X|Y}(1/2|1/2)dx \\
+    &= \int_0^{1/2} \frac{x + \frac{1}{4}}{\frac{1}{2} + \frac{1}{4}} dx \\
+    &= \frac{4}{3} \int_0^{1/2}x + \frac{1}{4}dx \\
+    &= \frac{4}{3} \Big[\frac{x^2}{2} + \frac{x}{4}\Big]_0^{1/2} = \frac{4}{3}\cdot\frac{1}{4} = \frac{1}{3}
+\end{align*}
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.18}\\  % PDF page 46
+Let $X \sim N(3, 16)$. Solve the following using the Normal table and using
+a computer package.
+
+\medskip\noindent(a)
+$$
+\P(X < 7) = \P(3 + 4Z < 7) = \P\left(Z < \frac{7 - 3}{4}\right) = \P(Z < 1) = 0.8413
+$$
+From \textbf{R}:
+\begin{verbatim}
+> pnorm(1)                     > 1 - pnorm(-0.25)
+[1] 0.84134475                 [1] 0.59870633
+\end{verbatim}
+
+\medskip\noindent(b)
+\begin{align*}
+    \P(X > 2) &= 1 - \P(X \leq 2) = 1 - \P(3 + 4Z \leq 2) = 1 - \P\left(Z \leq \frac{2 - 3}{4}\right) \\
+    &= 1 - \P(Z < -1/4) = 1 - (1 - 0.5987) = 0.5987
+\end{align*}
+
+\newpage\noindent
+(c) Find $x$ such that $\P(X > x) = 0.05$. By finding 0.95 in the table, we see that it is generated
+by the value 1.645, so:
+$$
+\P(Z\leq 1.645) = 0.95 \imp \P(Z > 1.645) = 1 - 0.95 = 0.05
+$$
+$$
+\P(4Z > 6.58) = \P(3 + 4Z > 9.58) = \P(X > 9.58) = 0.05
+$$
+So, $x = 9.58$.
+From \textbf{R}:
+\begin{verbatim}
+1 - pnorm(9.5794, mean = 3, sd = 4)
+[1] 0.05000037
+\end{verbatim}
+(d)
+\begin{align*}
+    \P(0\leq X < 4) &= \P(0\leq 3 + 4Z < 4) = \P(-3 \leq 4Z < 1)\\
+    &= \P(-3/4 \leq Z < 1/4) = \P(Z < 1/4) - \P(Z < -3/4) \\
+    &= 0.5987 - (1 - 0.7734) = 0.5987 - 0.2266 \\
+    &= 0.3721
+\end{align*}
+From \textbf{R}:
+\begin{verbatim}
+> pnorm(0.25) - pnorm(-0.75)
+[1] 0.37207897
+#### Alternatively
+> CH = rnorm(10000000, mean = 3, sd = 4)
+> sum(CH < 4 & CH > 0)/10000000
+[1] 0.3719199
+\end{verbatim}
+(e) Find $x$ such that $\P(|X| > |x|) = 0.05$.
+
+We can split this up in two sections if we assume $x>0$. Using that the sets are disjoint:
+\begin{align*}
+    \P(|X| > |x|) &= \P(X > x\cap X < -x) = \P(X > x) + \P(X < -x) \\
+    &= 1 - \P(X\leq x) + \P(X < - x) = 0.05 \\
+    \P(X\leq x) - \P(X < - x) &= 0.95
+\end{align*}
+Note we get minus. Translating to standard normal:
+$$
+\P\left(Z\leq \frac{x - 3}{4}\right) - \P\left(Z < \frac{-x - 3}{4}\right) = 0.95
+$$
+I am not able to see how to solve this by just looking up values because of the dependence.
+By using R, we can find that $x = 9.611$ which makes the lookup values $1.65275$ and -3.15275.
+Verifying in \textbf{R}.
+\begin{verbatim}
+> X = rnorm(10000000, mean = 3, sd = 4)
+> x = 9.611
+> sum(X < -x | X > x)/10000000
+[1] 0.0500769
+> sum(abs(X) > abs(x))/10000000
+[1] 0.0500769
+\end{verbatim}
+
+
+\newpage\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.19}\\  % PDF page 46
+Proving equation (2.12). Let $X$ be a random variable with pdf $f_X(x)$, and
+define the random variable $Y = r(X)$, where $r$ is either strictly monotone increasing
+or decreasing, so $r(\cdot)$ has the inverse function $s(\cdot) = r^{-1}(\cdot)$.
+Then, we can express the pdf of $Y$ as:
+$$
+f_Y(y) = f_X(s(y))\Big|\frac{ds(y)}{dy}\Big|.
+$$
+\textsc{Proof}. The proof will be in two parts. Assume first that $r$ is strictly increasing,
+which means that $s$ is strictly increasing and its derivative is positive.
+From the CDF of $Y$, we get:
+\begin{align*}
+    F_Y(y) &= \P(Y\leq y) \\
+    &= \P(r(X)\leq y) \\
+    &= \P(X\leq r^{-1}(y)) \\
+    &= \P(X\leq s(y)) \\
+    &= F_X(s(y))
+\end{align*}
+Differentiating the CDF to get the PDF.
+$$
+f_Y(y) = \frac{d}{dy}F_Y(y)
+= \frac{d}{dy}F_X(s(y)) =
+f_X(s(y))\frac{ds(y)}{dy}
+$$
+Now assume that $r$ is strictly decreasing, which means $s$ is strictly decreasing and thus
+has a negative derivative. From the CDF of $Y$, we now get:
+\begin{align*}
+    F_Y(y) &= \P(Y\leq y) \\
+    &= \P(r(X)\leq y) \\
+    &= \P(X\geq r^{-1}(y)) \\
+    &= 1 - \P(X\leq s(y)) \\
+    &= 1 - F_X(s(y))
+\end{align*}
+$$
+f_Y(y) = \frac{d}{dy}F_Y(y)
+= \frac{d}{dy}\big[1 - F_X(s(y))\big] =
+-f_X(s(y))\frac{ds(y)}{dy} =
+f_X(s(y))\left(-\frac{ds(y)}{dy}\right)
+$$
+Since the derivative will be negative, the negative of the derivative will be positive.
+Generalizing to both cases, we can write:
+\begin{equation}
+    f_Y(y) = f_X(s(y))\Big|\frac{ds(y)}{dy}\Big|
+    \tag*{\qed}
+\end{equation}
+A short note on why we get $1-\P(X\leq s(y))$ when $r$ is strictly decreasing. As an example,
+say that $X\sim U(0,5)$ and we define $Y = r(X)$ where $r(x) = 2 - 2x$, which is strictly
+decreasing. Then $r^{-1}(y) = s(y) = 1 - \frac{y}{2}$, which is also strictly decreasing. Then:
+$$
+\P(r(X) \leq y) = \P(2 - 2X \leq y) = \P(2 - y \leq 2X) = \P(1 - \frac{y}{2} \leq X) = \P(X \geq s(y))
+$$
+In order to get the expression in terms of $F_X(x)$, we rewrite it:
+$$
+\P(X \geq s(y)) = 1 - \P(X \leq s(y)) = 1 - F_X(s(y)).
+$$
+
+
+\newpage\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.20}\\  % PDF page 46
+Let $X, Y \sim U(0,1)$ be independent. Find the PDF for $X-Y$ and $X/Y$.
+The joint density of $X, Y$ is
+$$
+f(x, y) = 1,\quad x,y\in(0,1)
+$$
+and 0 elsewhere.
+
+\medskip\noindent We define $Z = X - Y$. We note that $Z$ can assume values between
+-1 and 1, which are the two extremes. This gives us $A_z = (-1, 1)$. We split this
+into two cases: when $X > Y$, then $A_z = (0, 1)$ and when $X < Y$, which means $A_z = (-1, 0)$.
+
+When $X > Y$ and $A_z = (0, 1)$.
+\begin{align*}
+    F_Z(z) &= \int_0^z\int_y^1 1 dxdy = \int_0^z[x]_y^1 dy \\
+    &= \int_0^z 1 - y dy = \left[y - \frac{y^2}{2}\right]_0^z \\
+    &= z - \frac{z^2}{2} 
+\end{align*}
+
+When $X < Y$ and $A_z = (-1, 0)$.
+\begin{align*}
+    F_Z(z) &= \int_{-1}^z\int_{-1}^y 1 dxdy = \int_{-1}^z[x]_{-1}^y dy \\
+    &= \int_{-1}^z y + 1 dy = \left[\frac{y^2}{2} + y\right]_{-1}^z \\
+    &= \frac{z^2}{2} + z + \frac{1}{2} 
+\end{align*}
+Summarizing the CDF, and differentiating to find the PDF. (The 1/2 carries over).
+$$
+F_Z(z) =
+\left\{
+    \begin{matrix}
+        \frac{z^2}{2} + z + \frac{1}{2} & z\in(-1, 0) \\
+        z - \frac{z^2}{2} + \frac{1}{2} & z\in(0, 1) 
+    \end{matrix}
+\right.
+\imp
+f_Z(z) =
+\left\{
+    \begin{matrix}
+        z + 1 & z\in(-1, 0) \\
+        1 - z & z\in(0, 1) 
+    \end{matrix}
+\right.
+$$
+\begin{figure}[H]
+    \begin{minipage}{0.5\textwidth}
+    \begin{center}
+        \begin{figure}[H]
+            \includegraphics[scale=0.51]{ch2_2.20.pdf}
+            \end{figure}
+        \end{center}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=0.75\textwidth,
+                axis lines = left,
+                ymin = -0.002,
+                ymax = 1.1,
+                xlabel = $z$,
+                ylabel = {$f_Z(z)$},
+            ]
+            %Section 1
+            \addplot [
+                domain=-1:0, 
+                samples=10, 
+                color=blue,
+                style=ultra thick,
+            ]
+            {x + 1};
+            %Section 2
+            \addplot [
+                domain=0:1, 
+                samples=10, 
+                color=blue,
+                style=ultra thick,
+            ]
+            {1 - x};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\newpage\noindent  Now we define $Z = X/Y$.
+$$
+F_Z(z) = \P(Z\leq z) = \P(X/Y\leq z) = \P(X\leq zY)
+$$
+$$
+F_Z(z) = \int_0^1\int_0^{\min(z,y)}1dxdy =
+\int_0^1\min(z,y) dy = 
+\left\{
+    \begin{tabular}{ll}
+        $\displaystyle\int_0^{\frac{1}{z}} zydy + \int_{\frac{1}{z}}^1 1 dy$ & $z\geq 1$ \\
+        $\displaystyle\int_0^1 zydy$ & $z < 1$
+    \end{tabular}
+\right.
+$$
+Evaluating the integrals to get the CDF, and differentiating to get the PDF:
+$$
+F_Z(z) = 
+\left\{
+    \begin{tabular}{ll}
+        $\displaystyle 1-\frac{1}{2z}$ & $z\geq 1$ \\
+        $\displaystyle \frac{z}{2}$ & $z < 1$
+    \end{tabular}
+\right.
+\imp
+f_Z(z) = 
+\left\{
+    \begin{tabular}{ll}
+        $\displaystyle \frac{1}{2z^2}$ & $z\geq 1$ \\
+        \rule{0pt}{20pt}$\displaystyle \frac{1}{2}$ & $z < 1$
+    \end{tabular}
+\right.
+$$
+Plots and simulation code.
+\begin{figure}[H]
+    \begin{minipage}{0.5\textwidth}
+    \begin{center}
+        \begin{figure}[H]
+            \includegraphics[scale=0.51]{ch2_2.20b.pdf}
+            \end{figure}
+        \end{center}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=0.75\textwidth,
+                axis lines = left,
+                ymin = -0.002,
+                ymax = 0.55,
+                xlabel = $z$,
+                ylabel = {$f_Z(z)$},
+            ]
+            %Section 1
+            \addplot [
+                domain=0:1.02, 
+                samples=10, 
+                color=blue,
+                style=ultra thick,
+            ]
+            {0.5};
+            %Section 2
+            \addplot [
+                domain=1:3, 
+                samples=40, 
+                color=blue,
+                style=ultra thick,
+            ]
+            {1/(2*x*x)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\begin{lstlisting}[style=RSyntax, title=R]
+# Simulating X-Y
+N = 10000
+X = runif(N);Y = runif(N)
+d1 = X - Y
+hist(d1, breaks = 50, prob = TRUE,
+        main="Histogram of X-Y")
+
+# Simulating X/Y
+N = 1000000
+X = runif(N);Y = runif(N)
+d2 = X/Y
+d3 = d2[abs(d2) < 3] # Removing very rare large vals
+d3 = d3*length(d2)/length(d3) # Normalizing probability
+hist(d3, breaks=60, prob=TRUE,
+        main = "Histogram of X/Y")
+\end{lstlisting}
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.21}\\  % PDF page 46
+Let $X_1,\ldots,X_n\sim\text{Exp}(\beta)$ be IID. Define $Y = \max(X_1,\ldots,X_n)$.
+Find the PDF of $Y$.
+
+\medskip\noindent
+Recall the PDF of the exponential distribution:
+$$
+f_X(x) = \frac{1}{\beta}\exp\left(-x/\beta\right), \quad x\geq 0
+$$
+Defining $r(X_1,\ldots, X_n) = \max(X_1,\ldots, X_n)$. Finding an expression for the CDF of $Y$.
+\begin{align*}
+    F_Y(y) = \P(Y\leq y) = \P(\max(X_1,\ldots, X_n)\leq y)
+\end{align*}
+According to the hint, $Y\leq y$ iff $X_i\leq y$ for all $i\in I$, where $I=\{1,\ldots, n\}$
+is the index set. We can therefore express the CDF of $Y$ in terms of each individual CDF:
+$$
+F_Y(y) = \P(X_1\leq y)\cap \P(X_2\leq y)\cap\ldots\cap\P(X_n\leq y) = \left(F_X(y)\right)^n
+= \left(1 - \exp(-y/\beta)\right)^n
+$$
+Differentiating wrt. $y$ to find the PDF.
+\begin{align*}
+    f_Y(y) &= 
+    \frac{d}{dy}F_Y(y) =
+    \frac{d}{dy}(F_X(y))^n
+    = n(F_X(y))^{n-1}f_X(y)\\
+    &= n\left(1 - \exp(-y/\beta)\right)^{n-1}\frac{1}{\beta}\exp\left(-y/\beta\right) \\
+    &= \frac{n}{\beta}\exp\left(-y/\beta\right)\left(1 - \exp(-y/\beta)\right)^{n-1}
+\end{align*}
+Plots and simulation code for $n=10$ and $\beta = 0.2$.
+\begin{figure}[H]
+    \begin{minipage}{0.5\textwidth}
+    \begin{center}
+        \begin{figure}[H]
+            \includegraphics[scale=0.7]{ch2_2.21.pdf}
+            \end{figure}
+        \end{center}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=0.9\textwidth,
+                axis lines = left,
+                ymin = -0.002,
+                ymax = 2.1,
+                xlabel = $y$,
+                ylabel = {$f_Y(y)$},
+            ]
+            %Section 1
+            \addplot [
+                domain=0:2.5, 
+                samples=100, 
+                color=blue,
+                style=ultra thick,
+            ]
+            {50*exp(-5*x)*(1 - exp(-5*x))^9};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\newpage\noindent
+\begin{lstlisting}[style=RSyntax, title=R]
+N = 100000
+lambda = 5
+
+exp1 = rexp(N, rate = lambda)
+exp2 = rexp(N, rate = lambda)
+exp3 = rexp(N, rate = lambda)
+exp4 = rexp(N, rate = lambda)
+exp5 = rexp(N, rate = lambda)
+exp6 = rexp(N, rate = lambda)
+exp7 = rexp(N, rate = lambda)
+exp8 = rexp(N, rate = lambda)
+exp9 = rexp(N, rate = lambda)
+exp10 = rexp(N, rate = lambda)
+
+Y = pmax(exp1, exp2, exp3, exp4, exp5,
+            exp6, exp7, exp8, exp9, exp10)
+
+hist(Y, breaks = 50, prob = TRUE)
+lines(density(Y), col="red", xlim=c(0,2.5), lwd=2)
+\end{lstlisting}
+
+% pdf("~/AllStatistics/files/ch2_2.21.pdf",
+%     width = 5, height = 4)
+% hist(Y, breaks = 50, prob = TRUE)
+% lines(density(Y), col="red", xlim=c(0,5), lwd=2)
+% dev.off()
+
+
+
+
+
+
+
+
+\begin{comment}
+
+\bigskip\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{2.1X}\\  % PDF page 46
+
+
+\begin{align*}
+    A &= B
+\end{align*}
+
+
+\begin{equation*}
+    A = B
+    \tag*{\qed}
+\end{equation*}
+
+
+%%% Tikz Image - side by side
+\begin{figure}
+    \begin{minipage}[0.5\textwidth]
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\textwidth,
+        axis lines = left,
+        ymin = -0.002,
+        ymax = 2.1,
+        xlabel = $z$,
+        ylabel = {$f_Z(z)$},
+    ]
+    %Section 1
+    \addplot [
+        domain=0:1, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {2 - 2*x};
+    \end{axis}
+\end{tikzpicture}
+    \end{minipage}
+    \begin{minipage}[0.5\textwidth]
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\textwidth,
+        axis lines = left,
+        ymin = -0.002,
+        ymax = 2.1,
+        xlabel = $z$,
+        ylabel = {$f_Z(z)$},
+    ]
+    %Section 1
+    \addplot [
+        domain=0:1, 
+        samples=10, 
+        color=blue,
+        style=ultra thick,
+    ]
+    {2 - 2*x};
+    \end{axis}
+\end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+
+\begin{lstlisting}[style=RSyntax, title=R]
+# Code
+\end{lstlisting}
+
+\begin{verbatim}
+# Output
+\end{verbatim}
+
+
+\end{comment}
